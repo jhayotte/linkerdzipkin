@@ -1,0 +1,90 @@
+version: '2'
+
+services:
+  router1:
+      image: router1:latest
+      container_name: router1svc
+      ports: 
+        - "8080"
+      depends_on: 
+        - linkerd_router1
+        - zipkin  
+        
+  # linkerd_router1 side by side
+  linkerd_router1:
+      image: buoyantio/linkerd:0.9.0
+      container_name: linkerd_router1
+      ports: 
+        - "4142"
+        - "4141"
+        - "9990"
+      volumes: ["./config_router1:/io.buoyant/linkerd/config:ro"]
+      command: /io.buoyant/linkerd/config/linkerd.yml
+
+  router2:
+      image: router2:latest
+      container_name: router2svc
+      ports: 
+        - "8020:8020"
+      depends_on: 
+        - linkerd_router2
+        - zipkin  
+
+  # linkerd_router1 side by side
+  linkerd_router2:
+      image: buoyantio/linkerd:0.9.0
+      container_name: linkerd_router2
+      ports: 
+        - "4142"
+        - "4141"
+        - "9990"
+        - "80"
+      volumes: ["./config_router2:/io.buoyant/linkerd/config:ro"]
+      command: /io.buoyant/linkerd/config/linkerd.yml
+
+  storage:
+    image: openzipkin/zipkin-mysql
+    container_name: mysql
+
+  # The zipkin process services the UI, and also exposes a POST endpoint that
+  # instrumentation can send trace data to. Scribe is enabled by default.
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/tree/1.19.0/zipkin-server#environment-variables
+    environment:
+      - STORAGE_TYPE=mysql
+      # Point the zipkin at the storage backend
+      - MYSQL_HOST=mysql
+      # Uncomment to disable scribe
+      # - SCRIBE_ENABLED=false
+      # Uncomment to enable self-tracing
+      # - SELF_TRACING_ENABLED=true
+      # Uncomment to enable debug logging
+      # - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG
+    ports:
+      # Listen port for the Scribe transport
+      - 9410:9410
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+    depends_on:
+      - storage
+
+  # Adds a cron to process spans since midnight every hour, and all spans each day
+  # This data is served by http://192.168.99.100:8080/dependency
+  #
+  # For more details, see https://github.com/openzipkin/docker-zipkin-dependencies
+  dependencies:
+    image: openzipkin/zipkin-dependencies
+    container_name: dependencies
+    entrypoint: crond -f
+    environment:
+      - STORAGE_TYPE=mysql
+      - MYSQL_HOST=mysql
+      # Add the baked-in username and password for the zipkin-mysql image
+      - MYSQL_USER=zipkin
+      - MYSQL_PASS=zipkin
+      # Uncomment to adjust memory used by the dependencies job
+      # - JAVA_OPTS=-verbose:gc -Xms1G -Xmx1G
+    depends_on:
+      - storage
