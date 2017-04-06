@@ -9,6 +9,7 @@ telemetry:
 
 routers:
 - protocol: http
+  label: router2
   dtab: /svc => /$/inet/router2svc/8020;
   servers:
   - port: 80

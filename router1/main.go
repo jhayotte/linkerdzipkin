@@ -16,7 +16,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func call(path string) (string, error) {
-	resp, err := http.Get(fmt.Sprintf("http://linkerd_router2/%s", path))
+	resp, err := http.Get(fmt.Sprintf("http://linkerd_router1:8090/%s", path))
 	if err != nil {
 		return "failed", err
 	}

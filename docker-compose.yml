@@ -19,6 +19,7 @@ services:
         - "4141:4141"
         - "9990:9990"
         - "8080:8080"
+        - "8090:8090"
       volumes: ["./config_router1:/io.buoyant/linkerd/config:ro"]
       command: /io.buoyant/linkerd/config/linkerd.yml
 
