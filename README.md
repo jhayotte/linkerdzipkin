@@ -6,8 +6,7 @@ This project will show the advantage of such configuration.
 
 
 HowTo:
-* For each router ```make docker.build```
-* ```docker-compose up``` will start our mutualized zipkin and our linkerd in sidecar.
+* ```docker-compose up -d``` will start our mutualized zipkin and our linkerd in sidecar.
 * With ```docker exec linkerd_router1 curl -s 127.1:8080/mymessage``` we send a message through:
 
 ```
