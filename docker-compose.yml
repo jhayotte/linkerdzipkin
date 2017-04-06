@@ -2,6 +2,7 @@ version: '2'
 
 services:
   router1:
+      build: ./router1
       image: router1:latest
       container_name: router1svc
       ports: 
@@ -24,6 +25,7 @@ services:
       command: /io.buoyant/linkerd/config/linkerd.yml
 
   router2:
+      build: ./router2
       image: router2:latest
       container_name: router2svc
       ports: 
