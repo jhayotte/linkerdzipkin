@@ -12,12 +12,13 @@ services:
         
   # linkerd_router1 side by side
   linkerd_router1:
-      image: buoyantio/linkerd:0.9.0
+      image: buoyantio/linkerd:0.9.1
       container_name: linkerd_router1
       ports: 
-        - "4142"
-        - "4141"
-        - "9990"
+        - "4142:4142"
+        - "4141:4141"
+        - "9990:9990"
+        - "8080:8080"
       volumes: ["./config_router1:/io.buoyant/linkerd/config:ro"]
       command: /io.buoyant/linkerd/config/linkerd.yml
 
@@ -32,14 +33,16 @@ services:
 
   # linkerd_router1 side by side
   linkerd_router2:
-      image: buoyantio/linkerd:0.9.0
+      image: buoyantio/linkerd:0.9.1
       container_name: linkerd_router2
       ports: 
-        - "4142"
-        - "4141"
-        - "9990"
-        - "80"
-      volumes: ["./config_router2:/io.buoyant/linkerd/config:ro"]
+        - "4242:4142"
+        - "4241:4141"
+        - "9991:9991"
+        - "80:80"
+      volumes: 
+        - "./config_router2:/io.buoyant/linkerd/config:ro"
+      
       command: /io.buoyant/linkerd/config/linkerd.yml
 
   storage:
