@@ -12,3 +12,4 @@ routers:
   dtab: /svc => /$/inet/router2svc/8020;
   servers:
   - port: 80
+    ip: 0.0.0.0
