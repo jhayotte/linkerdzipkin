@@ -12,5 +12,7 @@ In progress:
 
 and giving the result:
 
+```
 $ Router1: root mymessage
 $ Router2: received mymessage
+```
