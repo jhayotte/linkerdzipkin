@@ -1,15 +1,15 @@
 .PHONY: docker.build
 docker.build:
-	docker build -t router1:latest .
+	docker build -t string:latest .
 
 .PHONY: docker.run
 docker.run:
-	docker rm router1svc
-	docker run --rm -d --name router1svc router1 
+	docker rm stringsvc
+	docker run --rm -d --name stringsvc string 
 	
 .PHONY: docker.stop
 docker.stop:
-	docker stop router1svc 
+	docker stop stringsvc 
 
 .PHONY: install
 install:
@@ -17,4 +17,4 @@ install:
 
 .PHONY: run
 run:
-	router1
+	string

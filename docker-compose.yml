@@ -1,51 +1,50 @@
 version: '2'
 
 services:
-  router1:
-      build: ./router1
-      image: router1:latest
-      container_name: router1svc
+  proxy:
+      build: ./proxy
+      image: proxy:latest
+      container_name: proxysvc
       ports: 
         - "8080"
       depends_on: 
-        - linkerd_router1
+        - linkerd_proxy
         - zipkin  
         
-  # linkerd_router1 side by side
-  linkerd_router1:
+  # linkerd_proxy side by side
+  linkerd_proxy:
       image: buoyantio/linkerd:0.9.1
-      container_name: linkerd_router1
+      container_name: linkerd_proxy
       ports: 
         - "4142:4142"
         - "4141:4141"
         - "9990:9990"
         - "8080:8080"
-        - "8090:8090"
-      volumes: ["./config_router1:/io.buoyant/linkerd/config:ro"]
+        - "8070:8070"
+      volumes: ["./config_proxy:/io.buoyant/linkerd/config:ro"]
       command: /io.buoyant/linkerd/config/linkerd.yml
 
-  router2:
-      build: ./router2
-      image: router2:latest
-      container_name: router2svc
+  string:
+      build: ./string
+      image: string:latest
+      container_name: stringsvc
       ports: 
         - "8020:8020"
       depends_on: 
-        - linkerd_router2
+        - linkerd_string
         - zipkin  
 
-  # linkerd_router1 side by side
-  linkerd_router2:
+  # linkerd_proxy side by side
+  linkerd_string:
       image: buoyantio/linkerd:0.9.1
-      container_name: linkerd_router2
+      container_name: linkerd_string
       ports: 
         - "4242:4142"
         - "4241:4141"
         - "9991:9991"
-        - "80:80"
+        - "8040:8040"
       volumes: 
-        - "./config_router2:/io.buoyant/linkerd/config:ro"
-      
+        - "./config_string:/io.buoyant/linkerd/config:ro"
       command: /io.buoyant/linkerd/config/linkerd.yml
 
   storage:

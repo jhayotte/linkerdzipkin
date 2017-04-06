@@ -6,7 +6,7 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Router2: received %s", r.URL.Path[1:])
+	fmt.Fprintf(w, "String: received %s", r.URL.Path[1:])
 }
 
 func main() {

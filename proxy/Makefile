@@ -1,15 +1,15 @@
 .PHONY: docker.build
 docker.build:
-	docker build -t router2:latest .
+	docker build -t proxy:latest .
 
 .PHONY: docker.run
 docker.run:
-	docker rm router2svc
-	docker run --rm -d --name router2svc router2 
+	docker rm proxysvc
+	docker run --rm -d --name proxysvc proxy 
 	
 .PHONY: docker.stop
 docker.stop:
-	docker stop router2svc 
+	docker stop proxysvc 
 
 .PHONY: install
 install:
@@ -17,4 +17,4 @@ install:
 
 .PHONY: run
 run:
-	router2
+	proxy

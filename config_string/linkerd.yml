@@ -9,8 +9,8 @@ telemetry:
 
 routers:
 - protocol: http
-  label: router2
-  dtab: /svc => /$/inet/router2svc/8020;
+  label: incoming
+  dtab: /svc => /$/inet/stringsvc/8020;
   servers:
-  - port: 80
+  - port: 8020
     ip: 0.0.0.0

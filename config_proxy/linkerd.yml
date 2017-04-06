@@ -9,14 +9,14 @@ telemetry:
 
 routers:
 - protocol: http
-  label: router1
-  dtab: /svc => /$/inet/router1svc/8080;
+  label: incoming
+  dtab: /svc => /$/inet/proxysvc/8080;
   servers:
   - port: 8080
     ip: 0.0.0.0
 - protocol: http
-  label: linkerd_router2
-  dtab: /svc => /$/inet/linkerd_router2/80;
+  label: outgoing
+  dtab: /svc => /$/inet/linkerd_string/8020;
   servers:
-  - port: 8090
+  - port: 8070
     ip: 0.0.0.0

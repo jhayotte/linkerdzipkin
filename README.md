@@ -7,7 +7,7 @@ This project will show the advantage of such configuration.
 
 HowTo:
 * ```docker-compose up -d``` will start our mutualized zipkin and our linkerd in sidecar.
-* With ```docker exec linkerd_router1 curl -s 127.1:8080/mymessage``` we send a message through:
+* With ```docker exec linkerd_proxy curl -s 127.1:8080/mymessage``` we send a message through:
 
 ```
 ----------
@@ -16,28 +16,34 @@ HowTo:
      |
      V
 ------------------
-| linkerd_router1 | ----------------------------
-------------------                              |
-     |                                          |
-     V                                          V
-----------                                     ZIPKIN
-| router1 |                                     ^
----------                                       |
-     |                                          |
-     V                                          |
-------------------                              |
-| linkerd_router2 | ----------------------------
+| linkerd_proxy | -----------------------------
+------------------                             |
+     |   ^                                     |
+     V   |                                     V
+-----------                                 ZIPKIN --> Stores in MYSQL
+|   proxy  |                                   ^
+-----------                                    |
+                                               |
+                                               |
+------------------                             |
+| linkerd_string | ----------------------------
 ------------------
-     | 
-     V
-----------
-| router2 |
----------
+     |  ^
+     V  |
+-----------
+| string   |
+-----------
 ```
 
 and giving the result:
 
 ```
-$ Router1: root mymessage
-$ Router2: received mymessage
+$ proxy: root mymessage
+$ string: received mymessage
 ```
+
+# Zipkin
+
+![alt tag](http://url/to/img.png)
+
+In the picture above you can trace the request of the client and see how long it took for each step.

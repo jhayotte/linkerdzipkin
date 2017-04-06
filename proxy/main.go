@@ -9,14 +9,14 @@ import (
 func handler(w http.ResponseWriter, r *http.Request) {
 	res, err := call(r.URL.Path[1:])
 	if err != nil {
-		fmt.Fprintf(w, "Router1: %s \nRouter2: error: %s", r.URL.Path[1:], err)
+		fmt.Fprintf(w, "Proxy: %s \n error: %s", r.URL.Path[1:], err)
 		return
 	}
-	fmt.Fprintf(w, "Router1: root %s \n%s", r.URL.Path[1:], res)
+	fmt.Fprintf(w, "Proxy: root %s \n%s", r.URL.Path[1:], res)
 }
 
 func call(path string) (string, error) {
-	resp, err := http.Get(fmt.Sprintf("http://linkerd_router1:8090/%s", path))
+	resp, err := http.Get(fmt.Sprintf("http://linkerd_proxy:8070/%s", path))
 	if err != nil {
 		return "failed", err
 	}
