@@ -1,39 +1,28 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
+	"io/ioutil"
 	"net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	res, err := call()
-	fmt.Fprintf(w, "Router1: %s \nRouter2: %s error: %s", r.URL.Path[1:], res, err)
+	res, err := call(r.URL.Path[1:])
+	if err != nil {
+		fmt.Fprintf(w, "Router1: %s \nRouter2: error: %s", r.URL.Path[1:], err)
+		return
+	}
+	fmt.Fprintf(w, "Router1: root %s \n%s", r.URL.Path[1:], res)
 }
 
-func call() (string, error) {
-	req, err := http.NewRequest("GET", "http://linkerd_router2", nil)
-	if err != nil {
-		return "failed", err
-	}
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+func call(path string) (string, error) {
+	resp, err := http.Get(fmt.Sprintf("http://linkerd_router2/%s", path))
 	if err != nil {
 		return "failed", err
 	}
 	defer resp.Body.Close()
-
-	var res string
-	fmt.Println("decode...")
-	// Use json.Decode for reading streams of JSON data
-	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
-		log.Println(err)
-	}
-	fmt.Println("end...")
-	fmt.Println(res)
-	return res, nil
+	body, err := ioutil.ReadAll(resp.Body)
+	return string(body), err
 }
 
 func main() {
