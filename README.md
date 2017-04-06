@@ -5,9 +5,36 @@ Welcome to linkerdzipkin documentation. In this repository, I use linkerd as a s
 This project will show the advantage of such configuration.
 
 
-In progress:
+HowTo:
+* For each router ```make docker.build```
+* ```docker-compose up``` will start our mutualized zipkin and our linkerd in sidecar.
+* With ```docker exec linkerd_router1 curl -s 127.1:8080/mymessage``` we send a message through:
 
-* With ```docker exec linkerd_router1 curl -s 127.1:8080/mymessage``` we get a message going through:
+----------
+| client |
+---------
+     |
+     V
+------------------
+| linkerd_router1 | ----------------------------
+------------------                              |
+     |                                          |
+     V                                          V
+----------                                     ZIPKIN
+| router1 |                                     ^
+---------                                       |
+     |                                          |
+     V                                          |
+------------------                              |
+| linkerd_router2 | ----------------------------
+------------------
+     | 
+     V
+----------
+| router2 |
+---------
+     |
+     V
 
 
 and giving the result:
