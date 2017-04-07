@@ -13,7 +13,7 @@ docker.stop:
 
 .PHONY: install
 install:
-	go install ./...
+	go install .
 
 .PHONY: run
 run:

@@ -47,3 +47,7 @@ $ string: received mymessage
 ![alt tag](http://url/to/img.png)
 
 In the picture above you can trace the request of the client and see how long it took for each step.
+
+
+Current issue:
+- Traces between linkerd are not visible inside the same graph..

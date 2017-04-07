@@ -1,0 +1,9 @@
+package: github.com/jhayotte/linkerdzipkin/proxy
+import:
+- package: github.com/opentracing/opentracing-go
+- package: github.com/openzipkin/zipkin-go-opentracing
+  subpackages:
+  - ext
+- package: golang.org/x/text
+  subpackages:
+  - context

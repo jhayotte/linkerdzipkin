@@ -90,6 +90,6 @@ services:
       - MYSQL_USER=zipkin
       - MYSQL_PASS=zipkin
       # Uncomment to adjust memory used by the dependencies job
-      # - JAVA_OPTS=-verbose:gc -Xms1G -Xmx1G
+      - JAVA_OPTS=-verbose:gc -Xms1G -Xmx1G
     depends_on:
       - storage
